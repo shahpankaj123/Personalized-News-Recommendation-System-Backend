@@ -1,17 +1,18 @@
 from rest_framework import serializers
-from .models import User, Article, Recommendation
+from account.models import User
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'preferences', 'is_staff']
+        fields = ['id', 'username', 'email', 'is_admin', 'is_staff']
 
-class ArticleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Article
-        fields = ['id', 'title', 'content', 'author', 'published_date', 'tags']
+    def create(self, validated_data):
+        password = validated_data.pop('password', None)
+        instance = self.Meta.model(**validated_data)
+        if password is not None:
+            instance.set_password(password)
+        instance.save()
+        return instance
+        
 
-class RecommendationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Recommendation
-        fields = ['id', 'user', 'article', 'score', 'created_at']
+
