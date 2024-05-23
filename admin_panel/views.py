@@ -7,7 +7,7 @@ from admin_panel.serializers import UserSerializer
 
 class UserListView(APIView):
     #This view is for listing all users and creating a new user.
-    permission_classes = [permissions.IsAdminUser]
+    #permission_classes = [permissions.IsAdminUser]
     #It restricts access to admin users only
     def get(self, request):
         #Retrieves all User instances from the database.
