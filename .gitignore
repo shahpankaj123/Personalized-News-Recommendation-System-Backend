@@ -1,1 +1,5 @@
 .env
+account/__pycache__
+account/migrations
+admin_panel/__pycache__
+admin_panel/migrations
