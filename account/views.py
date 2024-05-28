@@ -24,7 +24,7 @@ class GetCSRFToken(APIView):
     def get(self, request):
         return Response({'success':'CSRF Cookie Set'})
     
-@method_decorator(csrf_exempt, name='dispatch')
+
 class RegistrationView(APIView):
     permission_classes=[AllowAny]
     def post(self,request):
@@ -59,7 +59,7 @@ class ActivateUser(APIView):
         else:
             return Response({'detail': 'Invalid activation link.'}, status=status.HTTP_400_BAD_REQUEST)      
 
-@method_decorator(csrf_exempt, name='dispatch')
+
 class LoginView(APIView):
     permission_classes=[AllowAny]
     def post(self,request):
@@ -76,10 +76,11 @@ class LoginView(APIView):
 
         return Response({'detail': 'Invalid Username or Password.'}, status=status.HTTP_400_BAD_REQUEST)
     
-  
-class LogoutVeiw(APIView):
-    permission_classes=[IsAuthenticated]
-    def get(self,request):
+   
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
         logout(request)
-        return Response({'detail': 'Logout successfully.'}, status=status.HTTP_200_OK)    
+        return Response({'detail': 'Logout successfully.'}, status=status.HTTP_200_OK)  
     
