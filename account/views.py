@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import render
 from account.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -13,6 +14,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.conf import settings
 from account.utils import send_activation_email,send_reset_password_email
+
+def custom_404(request, exception):
+    return render(request, 'accounts/404.html', status=404)
 
 @method_decorator(ensure_csrf_cookie, name='dispatch')
 class GetCSRFToken(APIView):

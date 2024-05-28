@@ -12,6 +12,7 @@ class UserListGetView(APIView):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
 class UserListPostView(APIView):
     permission_classes = [permissions.IsAdminUser]
     def post(self, request):
@@ -30,6 +31,7 @@ class UserGetView(APIView):
             return Response({'info': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
         serializer = UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
 class UserPutView(APIView):
     permission_classes = [permissions.IsAdminUser]
     def put(self, request, id):
@@ -42,6 +44,7 @@ class UserPutView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 class UserDeleteView(APIView):
     permission_classes = [permissions.IsAdminUser]
     def delete(self, request, id):
@@ -51,12 +54,14 @@ class UserDeleteView(APIView):
             return Response({'info': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
         user.delete()
         return Response({'info': 'Deleted Successfully'}, status=status.HTTP_204_NO_CONTENT)
+    
 class CategoryView(APIView):
     permission_classes = [permissions.IsAdminUser]
     def get(self, request):
         categories = Category.objects.all()
         serializer = CategorySerializer(categories, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
 class PostGetView(APIView):
     permission_classes = [permissions.IsAdminUser]
     def get(self, request, id):
@@ -66,6 +71,7 @@ class PostGetView(APIView):
             return Response({'info': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
         serializer = PostSerializer(post)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
 class PostDeleteView(APIView):
     permission_classes = [permissions.IsAdminUser]
     def delete(self, request, id):
