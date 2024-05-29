@@ -51,12 +51,12 @@ class UserPutView(APIView):
     permission_classes = [permissions.IsAdminUser]
     def put(self, request):
         #It fetches the user by ID, validates and updates the user data if valid, and returns the updated data
-        id = request.GET.get('id')
-        if id is None or not id.isdigit():
+        id = request.data.get('id')
+        if id is None:
             return Response({'info': 'Invalid ID'}, status=status.HTTP_400_BAD_REQUEST)
         try:
             user = User.objects.get(id=id)
-            serializer = UserSerializer(user, data=request.data)
+            serializer = UserSerializer(user,data=request.data,partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
@@ -68,8 +68,8 @@ class UserPutView(APIView):
 class UserDeleteView(APIView):
     permission_classes = [permissions.IsAdminUser]
     def delete(self, request):
-        id = request.GET.get('id')
-        if id is None or not id.isdigit():
+        id = request.data.get('id')
+        if id is None:
             return Response({'info': 'Invalid ID'}, status=status.HTTP_400_BAD_REQUEST)
         try:
             user = User.objects.get(id=id)
