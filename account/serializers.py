@@ -33,3 +33,12 @@ class UserSerializer(serializers.ModelSerializer):
         user.is_active=False
         user.save()
         return user
+    
+class UserLoginSerializer(serializers.ModelSerializer):
+    id = serializers.PrimaryKeyRelatedField(read_only=True)
+    username = serializers.CharField(read_only=True)
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ["id", "username", "password"]    

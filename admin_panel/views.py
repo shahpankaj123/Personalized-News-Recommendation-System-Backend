@@ -5,13 +5,12 @@ from rest_framework.response import Response
 from account.models import User
 from admin_panel.serializers import UserSerializer,PostSerializer,CategorySerializer
 from .models import Category,Post
+from account.mixins import AdminUserPermissionMixin,StaffUserPermissionMixin
 
 #Handles retrieving a list of all users.
-class UserListGetView(APIView):
-    #Restricted to admin users only.
-    permission_classes = [permissions.IsAdminUser]
+class UserListGetView(AdminUserPermissionMixin,APIView):
     def get(self, request):
-        #retrieves all users from the database, serializes them, and returns the serialized data.
+        print(request.user)
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

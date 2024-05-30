@@ -15,11 +15,13 @@ from decouple import config
 import os
 from django.utils.deprecation import MiddlewareMixin
 
+
 # Disable CSRF Token
 class DisableCSRFMiddleware(MiddlewareMixin):
     def process_request(self, request):
         if request.path.startswith('/api/'):
             setattr(request, '_dont_enforce_csrf_checks', True)
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -48,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'rest_framework.authtoken',
     'account',
     'admin_panel',
 ]
@@ -129,6 +132,12 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 

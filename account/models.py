@@ -1,7 +1,8 @@
 from django.db import models
+import uuid
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
-class MyUserManager(BaseUserManager):
+class UserManager(BaseUserManager):
     def create_user(self,email,username,password=None,password1=None):
         """
         Creates and saves a User with the given email, date of
@@ -16,6 +17,7 @@ class MyUserManager(BaseUserManager):
         )
 
         user.set_password(password)
+        user.is_normalusers=True
         user.save(using=self._db)
         return user
 
@@ -33,31 +35,29 @@ class MyUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-
 class User(AbstractBaseUser):
-    
+
     class Meta:
-        db_table = "User"
+        db_table = 'Users'
 
-    email = models.EmailField(
-        verbose_name="email address",
-        max_length=255,
-        unique=True,
-    )
-    username=models.CharField(max_length=200)
-    is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
-    created_at=models.DateTimeField(auto_now_add=True)
-    updated_at=models.DateTimeField(auto_now=True)
+    email = models.EmailField(max_length=200, unique=True, editable=True)
+    username = models.CharField(max_length=100, unique=True)
+    LastLogin = models.DateTimeField(auto_now=True)
 
-    objects = MyUserManager()
+    is_active= models.BooleanField(default=True)
+    is_admin=models.BooleanField(default=False)
 
-    USERNAME_FIELD = "email"
+    is_normalusers=models.BooleanField(default=False)
+    is_staffusers=models.BooleanField(default=False)
+
+    objects = UserManager()
+
+    USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
     def __str__(self):
         return self.email
-
+    
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"
         # Simplest possible answer: Yes, always
@@ -72,4 +72,9 @@ class User(AbstractBaseUser):
     def is_staff(self):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
-        return self.is_admin
+        if self.is_admin or self.is_staffusers:
+           return True
+        else:
+            return False
+    
+    
