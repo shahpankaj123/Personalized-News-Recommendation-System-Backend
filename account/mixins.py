@@ -1,6 +1,6 @@
 from rest_framework import permissions
 
-from .permissions import AdminUserPermission,StaffUserPermission
+from .permissions import AdminUserPermission,AdminStaffUserPermission
 from rest_framework.authentication import TokenAuthentication
 
 class AdminUserPermissionMixin:
@@ -8,5 +8,6 @@ class AdminUserPermissionMixin:
     authentication_classes = [TokenAuthentication]
 
 
-class StaffUserPermissionMixin:
-    permission_classes = [permissions.IsAuthenticated, StaffUserPermission]    
+class AdminStaffUserPermissionMixin:
+    permission_classes = [permissions.IsAuthenticated, AdminStaffUserPermission] 
+    authentication_classes = [TokenAuthentication]   

@@ -174,3 +174,4 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = config('email_user')
 EMAIL_HOST_PASSWORD = config('email_pass')
 EMAIL_USE_SSL = False
+
