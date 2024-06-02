@@ -116,6 +116,12 @@ class CategoryPutView(AdminStaffUserPermissionMixin,APIView):
         except Category.DoesNotExist:
             return Response({'info': 'Category not found'}, status=status.HTTP_404_NOT_FOUND)
 #Retrieves details of a specific post based on the provided ID
+class PostGetAllView(AdminStaffUserPermissionMixin,APIView):
+    def get(self, request):
+        posts = Post.objects.all()
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 class PostGetView(AdminStaffUserPermissionMixin,APIView):
     def get(self, request):
         id = request.GET.get('id')
