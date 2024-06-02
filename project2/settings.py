@@ -48,9 +48,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    #internal apps
     'rest_framework',
     'corsheaders',
     'rest_framework.authtoken',
+    
+    #external apps
     'account',
     'admin_panel',
 ]
@@ -125,12 +129,28 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# custom user models seeting
 AUTH_USER_MODEL = "account.User"
+
+
+# cors Header setting 
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
 ]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_HEADERS = (
+    "accept",
+    "authorization",
+    "content-type",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+)
+#end
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [

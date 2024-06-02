@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
 from account.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.tokens import default_token_generator
@@ -42,13 +43,12 @@ class ActivateUser(APIView):
         user = User.objects.get(id=id)
         if default_token_generator.check_token(user, token):
             if user.is_active:
-                return Response({'detail': 'Account is already activated.'}, status=status.HTTP_200_OK)
- 
+                return HttpResponseRedirect('http://localhost:5173/valid-error') 
             user.is_active = True
             user.save()
-            return Response({'detail': 'Account activated successfully.'}, status=status.HTTP_200_OK)
+            return HttpResponseRedirect('http://localhost:5173/verify-email')
         else:
-            return Response({'detail': 'Invalid activation link.'}, status=status.HTTP_400_BAD_REQUEST)      
+            return HttpResponseRedirect('http://localhost:5173/valid-error')     
 
 
 class LoginView(APIView):
