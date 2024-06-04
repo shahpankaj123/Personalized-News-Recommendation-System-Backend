@@ -49,6 +49,7 @@ class User(AbstractBaseUser):
 
     is_normalusers=models.BooleanField(default=False)
     is_staffusers=models.BooleanField(default=False)
+    otp=models.IntegerField(default=0)
 
     objects = UserManager()
 
