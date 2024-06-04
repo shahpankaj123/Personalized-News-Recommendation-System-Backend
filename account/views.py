@@ -82,11 +82,13 @@ class UserSendOTPViews(APIView):
         email = request.data.get('email')
         if email is None:
             return Response({'message':'Invalid email'},status=status.HTTP_404_NOT_FOUND)
-            
-        user_obj=User.objects.get(email=email)
-        print(user_obj)
+        try:    
+            user_obj=User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({'message':'User Not Found'},status=status.HTTP_404_NOT_FOUND)
+        
         if user_obj is not None:
-            rand_number=int(random.randint(1,1000))
+            rand_number=int(random.randint(1000,10000))
             print(rand_number)
             user_obj.otp=rand_number
             user_obj.save()
@@ -105,11 +107,14 @@ class UserVerifyOTPViews(APIView):
         if otp is None or otp == 'undefined' or otp == '' or otp == 'null':
             return Response({'message': 'otp is Required'}, status=status.HTTP_404_NOT_FOUND)
         
-        user_obj=User.objects.get(email=email)
+        try:    
+            user_obj=User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({'message':'User Not Found'},status=status.HTTP_404_NOT_FOUND)
 
         if user_obj is not None:
             if user_obj.otp == otp:
-                user_obj.otp=10000
+                user_obj.otp=101
                 user_obj.save()
                 return Response({'message':'OTP Verified Sucessfully'},status=status.HTTP_200_OK)
             return Response({'message':'Invalid OTP'},status=status.HTTP_400_BAD_REQUEST)
@@ -130,14 +135,18 @@ class UserChangePasswordView(APIView):
         if passsword != password1:
             return Response({'message':'Password and Confirm Password donot Match'},status=status.HTTP_406_NOT_ACCEPTABLE)
         
-        user_obj=User.objects.get(email=email)
+        try:    
+            user_obj=User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({'message':'User Not Found'},status=status.HTTP_404_NOT_FOUND)
+        
         if user_obj is not None:
-            if user_obj.otp==10000:
+            if user_obj.otp==101:
                 user_obj.set_password(passsword)
                 user_obj.otp=0
                 user_obj.save()
                 return Response({'message':'Password Changed Sucessfully'},status=status.HTTP_200_OK)
-            return Response({'message':'Invalid OTP'},status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message':'OTP Experied'},status=status.HTTP_400_BAD_REQUEST)
         return Response({'message':'Error'},status=status.HTTP_400_BAD_REQUEST)
 
 
