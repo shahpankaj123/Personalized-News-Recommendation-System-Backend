@@ -89,7 +89,6 @@ class UserSendOTPViews(APIView):
         
         if user_obj is not None:
             rand_number=int(random.randint(1000,10000))
-            print(rand_number)
             user_obj.otp=rand_number
             user_obj.save()
             send_reset_password_email(user_obj.email,rand_number)
@@ -100,7 +99,6 @@ class UserVerifyOTPViews(APIView):
     def post(self,request):
         email=request.data.get('email')
         otp=int(request.data.get('otp'))
-        print(email,otp)
         if email is None or email == 'undefined' or email == '' or email == 'null':
             return Response({'message': 'email is Required'}, status=status.HTTP_404_NOT_FOUND)
         
