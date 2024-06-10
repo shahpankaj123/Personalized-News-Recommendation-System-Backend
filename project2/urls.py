@@ -19,11 +19,13 @@ from django.urls import path,include
 from django.conf.urls.static import static
 from django.conf import settings
 from account import views
+from contact.views import ContactView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/account/',include('account.urls')),
     path('api/admin_panel/', include('admin_panel.urls')),
+    path('api/create_contact/',ContactView.as_view()),
 ]
 
 handler404 = 'account.views.custom_404'

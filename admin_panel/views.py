@@ -3,8 +3,10 @@ from rest_framework import permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from account.models import User
+from contact.models import Contact
 from admin_panel.serializers import UserSerializer,PostSerializer,CategorySerializer
 from .models import Category,Post
+from django.db.models import F
 from account.mixins import AdminUserPermissionMixin,AdminStaffUserPermissionMixin
 
 #Handles retrieving a list of all users.
@@ -170,6 +172,7 @@ class PostPostView(AdminStaffUserPermissionMixin,APIView):
             serializer.save()
             return Response({'info': 'Created Successfully'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 class CountAdminView(AdminStaffUserPermissionMixin,APIView):
     def get(self, request):
         try:
@@ -177,6 +180,7 @@ class CountAdminView(AdminStaffUserPermissionMixin,APIView):
             return Response({'count': count}, status=status.HTTP_200_OK)
         except:
             return Response({'count': 0}, status=status.HTTP_200_OK)
+        
 class CountStaffView(AdminStaffUserPermissionMixin,APIView):
     def get(self, request):
         try:
@@ -184,6 +188,7 @@ class CountStaffView(AdminStaffUserPermissionMixin,APIView):
             return Response({'count': count}, status=status.HTTP_200_OK)
         except:
             return Response({'count': 0}, status=status.HTTP_200_OK)
+        
 class CountUserView(AdminStaffUserPermissionMixin,APIView):
     def get(self, request):
         try:
@@ -191,6 +196,7 @@ class CountUserView(AdminStaffUserPermissionMixin,APIView):
             return Response({'count': count}, status=status.HTTP_200_OK)
         except:
             return Response({'count': 0}, status=status.HTTP_200_OK)
+        
 class CountPostView(AdminStaffUserPermissionMixin,APIView):
     def get(self, request):
         try:
@@ -198,6 +204,7 @@ class CountPostView(AdminStaffUserPermissionMixin,APIView):
             return Response({'count': count}, status=status.HTTP_200_OK)
         except:
             return Response({'count': 0}, status=status.HTTP_200_OK)
+        
 class CountCategoryView(AdminStaffUserPermissionMixin,APIView):
     def get(self, request):
         try:
@@ -205,3 +212,11 @@ class CountCategoryView(AdminStaffUserPermissionMixin,APIView):
             return Response({'count': count}, status=status.HTTP_200_OK)
         except:
             return Response({'count': 0}, status=status.HTTP_200_OK)
+
+class ContactViewApi(AdminStaffUserPermissionMixin ,APIView):
+    def get(self, request):
+        try:
+            query = Contact.objects.all().values(vname=F('name'), vphone=F('phone'), vmessage=F('message'))
+        except Exception as e:
+            return Response({'error': str(e)}, status=500)
+        return Response(query, status=200)

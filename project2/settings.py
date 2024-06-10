@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     #external apps
     'account',
     'admin_panel',
+    'contact',
 ]
 
 

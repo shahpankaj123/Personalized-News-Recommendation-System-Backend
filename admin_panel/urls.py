@@ -19,4 +19,7 @@ urlpatterns = [
     path('posts/create/',PostPostView.as_view(), name='post-post'),
     path('posts/update/',PostPutView.as_view(), name='post-put'),
     path('posts/delete/',PostDeleteView.as_view(), name='post-delete'),
+
+    #for Contact
+    path('contact/',ContactViewApi.as_view()),
 ]
