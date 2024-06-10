@@ -170,3 +170,38 @@ class PostPostView(AdminStaffUserPermissionMixin,APIView):
             serializer.save()
             return Response({'info': 'Created Successfully'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class CountAdminView(AdminStaffUserPermissionMixin,APIView):
+    def get(self, request):
+        try:
+            count = User.objects.filter(is_admin=True).count()
+            return Response({'count': count}, status=status.HTTP_200_OK)
+        except:
+            return Response({'count': 0}, status=status.HTTP_200_OK)
+class CountStaffView(AdminStaffUserPermissionMixin,APIView):
+    def get(self, request):
+        try:
+            count = User.objects.filter(is_staff=True).count()
+            return Response({'count': count}, status=status.HTTP_200_OK)
+        except:
+            return Response({'count': 0}, status=status.HTTP_200_OK)
+class CountUserView(AdminStaffUserPermissionMixin,APIView):
+    def get(self, request):
+        try:
+            count = User.objects.filter(is_active=True).count()
+            return Response({'count': count}, status=status.HTTP_200_OK)
+        except:
+            return Response({'count': 0}, status=status.HTTP_200_OK)
+class CountPostView(AdminStaffUserPermissionMixin,APIView):
+    def get(self, request):
+        try:
+            count = Post.objects.all().count()
+            return Response({'count': count}, status=status.HTTP_200_OK)
+        except:
+            return Response({'count': 0}, status=status.HTTP_200_OK)
+class CountCategoryView(AdminStaffUserPermissionMixin,APIView):
+    def get(self, request):
+        try:
+            count = Category.objects.all().count()
+            return Response({'count': count}, status=status.HTTP_200_OK)
+        except:
+            return Response({'count': 0}, status=status.HTTP_200_OK)
