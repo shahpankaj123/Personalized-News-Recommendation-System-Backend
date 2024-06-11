@@ -6,7 +6,14 @@ from admin_panel.serializers import PostSerializer
 from datetime import timedelta
 from django.utils import timezone
 from rest_framework import status
+from admin_panel.serializers import CategorySerializer
 
+class CategoryGetView(APIView):
+    def get(self, request):
+        categories = Category.objects.all()
+        serializer = CategorySerializer(categories, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
 class RandomPostView(APIView):
     def get(self,request):
         try:

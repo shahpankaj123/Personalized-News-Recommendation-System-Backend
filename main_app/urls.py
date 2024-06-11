@@ -6,4 +6,5 @@ urlpatterns = [
     path('latest/',LatestPostView.as_view()),
     path('categorywise/',CategorywisePostView.as_view()),
     path('search/',SearchPostView.as_view()),
+    path('get_category/',CategoryGetView.as_view()),
 ]
