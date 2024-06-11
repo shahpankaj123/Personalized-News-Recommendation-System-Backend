@@ -15,6 +15,7 @@ urlpatterns = [
     path('category/delete/',CategoryDeleteView.as_view(), name='category-delete'),
 
     #For Posts
+    path('ListPosts/',PostGetAllView.as_view()),
     path('posts/',PostGetView.as_view(), name='post-get'),
     path('posts/create/',PostPostView.as_view(), name='post-post'),
     path('posts/update/',PostPutView.as_view(), name='post-put'),

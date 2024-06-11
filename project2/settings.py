@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'account',
     'admin_panel',
     'contact',
+    'vapps'
 ]
 
 
@@ -174,8 +175,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
-
 MEDIAFILES_DIRS=[
     BASE_DIR,'media'
 ]
@@ -196,3 +195,4 @@ EMAIL_HOST_USER = config('email_user')
 EMAIL_HOST_PASSWORD = config('email_pass')
 EMAIL_USE_SSL = False
 
+TIME_ZONE = 'Asia/Kathmandu'
