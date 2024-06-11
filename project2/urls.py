@@ -25,6 +25,7 @@ urlpatterns = [
     path('api/account/',include('account.urls')),
     path('api/admin_panel/', include('admin_panel.urls')),
     path('api/create_contact/',ContactView.as_view()),
+    path('api/main/',include('main_app.urls')),
     path('api/vapps/',include('vapps.urls')),
 ]
 

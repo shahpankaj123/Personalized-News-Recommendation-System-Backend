@@ -23,4 +23,12 @@ urlpatterns = [
 
     #for Contact
     path('contact/',ContactViewApi.as_view()),
+
+    #for count
+    path('count/user/',CountUserView.as_view()),
+    path('count/admin/',CountAdminView.as_view()),
+    path('count/staff/',CountStaffView.as_view()),
+    path('count/category/',CountCategoryView.as_view()),
+    path('count/post/',CountPostView.as_view()),
+    
 ]

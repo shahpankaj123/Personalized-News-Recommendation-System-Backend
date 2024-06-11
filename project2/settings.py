@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'account',
     'admin_panel',
     'contact',
+    'main_app',
     'vapps'
 ]
 

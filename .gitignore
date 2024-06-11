@@ -6,3 +6,4 @@ admin_panel/migrations
 project2/__pycache__
 media
 contact/migrations
+vapps/migrations
