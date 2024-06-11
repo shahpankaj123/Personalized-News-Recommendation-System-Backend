@@ -9,3 +9,5 @@ project2/__pycache__
 media
 contact/migrations
 vapps/migrations
+vapps/__pycache__
+main_app/migrations
