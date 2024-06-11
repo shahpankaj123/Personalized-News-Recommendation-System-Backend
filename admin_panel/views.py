@@ -192,7 +192,7 @@ class CountStaffView(AdminStaffUserPermissionMixin,APIView):
 class CountUserView(AdminStaffUserPermissionMixin,APIView):
     def get(self, request):
         try:
-            count = User.objects.filter(is_active=True).count()
+            count = User.objects.filter(is_normalusers=True).count()
             return Response({'count': count}, status=status.HTTP_200_OK)
         except:
             return Response({'count': 0}, status=status.HTTP_200_OK)
