@@ -2,6 +2,8 @@
 account/__pycache__
 account/migrations
 admin_panel/__pycache__
+main_app/__pycache__
+contact/__pycache__
 admin_panel/migrations
 project2/__pycache__
 media
