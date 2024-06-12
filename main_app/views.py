@@ -62,3 +62,16 @@ class SearchPostView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except:
             return Response({'error': 'An error occurred while searching for posts.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class SinglePostView(APIView):
+    def get(self, request):
+        try:
+            id = request.GET.get('postId')
+            if not id:
+                return Response({'error': 'postId parameter is missing.'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            posts = Post.objects.get(id=id)
+            serializer = PostSerializer(posts)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response({'error': 'An error occurred while fetching category-wise posts.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)        
