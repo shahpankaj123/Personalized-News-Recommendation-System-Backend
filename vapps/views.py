@@ -35,7 +35,9 @@ class NewsVideoListView(APIView):
 class Test(APIView):
     def get(self, request):
         API_KEY = '034c373ed2984aecb086fbf614f3fffe'
+        s='Business'
         response = requests.get(f"https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey={API_KEY}")
+        print(response)
         data = response.json()  # Simplified way to parse JSON response
         article_data = {
             'title': [article['title'] for article in data['articles']],
@@ -44,13 +46,16 @@ class Test(APIView):
             'img': [article['urlToImage'] for article in data['articles']]
         }
         df = pd.DataFrame(article_data)
+        print(df)
+        c=Category.objects.get(id='be534fc5-120f-4da3-83dd-c1ef789057e1')
+        u=User.objects.get(id=1)
         # Save to database
         for index, row in df.iterrows():
             post=Post(
                 title=row['title'],
                 description=row['description'],
-                category=Category.objects.get(id='be534fc5120f4da383ddc1ef789057e1'),
-                author=User.objects.get(id=1)
+                category=c,
+                author=u
             )
             filename = os.path.basename(row['img']) 
             file_content = ContentFile(requests.get(row['img']).content)
