@@ -26,7 +26,7 @@ class PostSerializer(serializers.ModelSerializer):
     category=serializers.ReadOnlyField(source='category.name')
     class Meta:
         model = Post
-        fields = ['title', 'description', 'category','author','post_img']
+        fields = ['title', 'description', 'category','author','post_img','post_date','post_time']
         
 
 
