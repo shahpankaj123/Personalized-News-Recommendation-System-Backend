@@ -28,7 +28,7 @@ class UserRegistrationView(APIView):
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             token = default_token_generator.make_token(user)
             activation_url = 'http://127.0.0.1:8000/api/account/user/activate/'+ uid + '/' + token
-            send_activation_email(user.email, activation_url)
+            send_activation_email.delay(user.email, activation_url)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
 
@@ -75,6 +75,7 @@ class UserLogoutView(APIView):
     def post(self, request, *args):
         token = Token.objects.get(user=request.user)
         token.delete()
+        logout(request)
         return Response({"success": True, "detail": "Logged out!"}, status=status.HTTP_200_OK) 
     
 class UserSendOTPViews(APIView):
@@ -91,7 +92,7 @@ class UserSendOTPViews(APIView):
             rand_number=int(random.randint(1000,10000))
             user_obj.otp=rand_number
             user_obj.save()
-            send_reset_password_email(user_obj.email,rand_number)
+            send_reset_password_email.delay(user_obj.email,rand_number)
             return Response({'message':'Please check your mail for OTP'},status=status.HTTP_202_ACCEPTED)   
         return Response({'message':'Invalid mail'},status=status.HTTP_404_NOT_FOUND)
 

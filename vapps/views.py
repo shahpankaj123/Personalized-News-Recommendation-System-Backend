@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from account.mixins import AdminStaffUserPermissionMixin
 from .serializers import NewsVideoSerializer
 from .models import NewsVideo
+from django.core.cache import cache
 from rest_framework.parsers import MultiPartParser, FormParser
 
 import requests
@@ -27,7 +28,12 @@ class PostNewsVideoViews(APIView):
 
 class NewsVideoListView(APIView):
     def get(self, request):
-        news_videos = NewsVideo.objects.all()
+        if cache.get("videos"):
+            news_videos=cache.get("videos")
+            print(news_videos)
+        else:    
+            news_videos = NewsVideo.objects.all()
+            cache.set("videos",news_videos, timeout=60)
         serializer = NewsVideoSerializer(news_videos, many=True)
         return Response(serializer.data) 
        
@@ -36,7 +42,7 @@ class Test(APIView):
     def get(self, request):
         API_KEY = '034c373ed2984aecb086fbf614f3fffe'
         s='Business'
-        response = requests.get(f"https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey={API_KEY}")
+        response = requests.get(f"https://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey={API_KEY}")
         print(response)
         data = response.json()  # Simplified way to parse JSON response
         article_data = {

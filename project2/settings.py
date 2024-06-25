@@ -95,7 +95,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'project2.wsgi.application'
 
-
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
@@ -153,6 +153,17 @@ CORS_ALLOW_HEADERS = (
     "x-csrftoken",
     "x-requested-with",
 )
+
+#redis
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
 #end
 
 REST_FRAMEWORK = {
@@ -196,3 +207,9 @@ EMAIL_HOST_PASSWORD = config('email_pass')
 EMAIL_USE_SSL = False
 
 TIME_ZONE = 'Asia/Kathmandu'
+
+#celery
+CELERY_BROKER_URL="redis://127.0.0.1:6379/0"
+CELERY_TIMEZONE = "Asia/Kathmandu"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60

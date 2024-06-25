@@ -6,7 +6,9 @@ from admin_panel.serializers import PostSerializer
 from datetime import timedelta
 from django.utils import timezone
 from rest_framework import status
+from django.core.cache import cache
 from admin_panel.serializers import CategorySerializer
+
 
 class CategoryGetView(APIView):
     def get(self, request):
@@ -19,7 +21,12 @@ class RandomPostView(APIView):
         try:
             end_date = timezone.now()
             start_date = end_date - timedelta(days=7)
-            posts = Post.objects.filter(post_date__range=[start_date, end_date])
+            if cache.get("posts"):
+                posts=cache.get("posts")
+                print(posts)
+            else:    
+                posts = Post.objects.filter(post_date__range=[start_date, end_date])
+                cache.set("posts",posts, timeout=60)
             serializer = PostSerializer(posts, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except:
@@ -28,7 +35,12 @@ class RandomPostView(APIView):
 class LatestPostView(APIView):
     def get(self,request):
         try:
-            posts = Post.objects.order_by('-post_date')[:5]
+            if cache.get("latest-posts"):
+                print("hello word")
+                posts=cache.get("latest-posts")
+            else:    
+                posts = Post.objects.order_by('-post_date')[:8]
+                cache.set("latest-posts",posts, timeout=60)
             serializer = PostSerializer(posts, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except:
@@ -44,7 +56,14 @@ class CategorywisePostView(APIView):
             end_date = timezone.now()
             start_date = end_date - timedelta(days=7)
 
-            posts = Post.objects.filter(category__id=category, post_date__range=[start_date, end_date])
+            if cache.get(f"category-posts{category}"):
+                posts=cache.get(f"category-posts{category}")
+                print(posts)
+            else:    
+                posts = Post.objects.filter(category__id=category, post_date__range=[start_date, end_date])
+                cache.set(f"category-posts{category}",posts, timeout=60)
+
+            #posts = Post.objects.filter(category__id=category, post_date__range=[start_date, end_date])
             serializer = PostSerializer(posts, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         

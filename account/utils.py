@@ -2,7 +2,9 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
+from celery import shared_task
 
+@shared_task
 def send_activation_email(recipient_email, activation_url):
     subject = 'Activate your account on '
     from_email = settings.EMAIL_HOST_USER
@@ -13,7 +15,8 @@ def send_activation_email(recipient_email, activation_url):
     email = EmailMultiAlternatives(subject, text_content, from_email, to)
     email.attach_alternative(html_content, "text/html")
     email.send()
-
+    
+@shared_task
 def send_reset_password_email(recipient_email, activation_url):
     subject = 'Reset Password'
     from_email = settings.EMAIL_HOST_USER
