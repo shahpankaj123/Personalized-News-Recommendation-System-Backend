@@ -10,7 +10,7 @@ class Category(models.Model):
         db_table = 'Category'
 
     def __str__(self):
-        return self.name    
+        return f'{self.id}+{self.name}'   
 
 class Post(models.Model):
 

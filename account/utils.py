@@ -3,7 +3,8 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
 from celery import shared_task
-
+from .models import User
+from admin_panel.models import Post
 @shared_task
 def send_activation_email(recipient_email, activation_url):
     subject = 'Activate your account on '
@@ -27,3 +28,20 @@ def send_reset_password_email(recipient_email, activation_url):
     email = EmailMultiAlternatives(subject, text_content, from_email, to)
     email.attach_alternative(html_content, "text/html")
     email.send() 
+
+@shared_task
+def send_top_news_email():
+    subject = 'Notice'
+    from_email = settings.EMAIL_HOST_USER
+    user_obj = User.objects.filter(is_normalusers=True)
+    to = [x.email for x in user_obj if x.email] 
+    if to:
+        post = Post.objects.all()[:5]
+        html_content = render_to_string('accounts/topnews.html', {'post': post})
+        text_content = strip_tags(html_content)
+        email = EmailMultiAlternatives(subject, text_content, from_email, to)
+        email.attach_alternative(html_content, "text/html")
+        email.send()
+
+
+

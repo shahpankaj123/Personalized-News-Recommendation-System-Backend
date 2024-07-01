@@ -42,7 +42,7 @@ class Test(APIView):
     def get(self, request):
         API_KEY = '034c373ed2984aecb086fbf614f3fffe'
         s='Business'
-        response = requests.get(f"https://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey={API_KEY}")
+        response = requests.get(f"https://newsapi.org/v2/everything?q=AI&from=2024-06-01&sortBy=publishedAt&apiKey=bb061a9abb70445eb0a3028e54fd1d56")
         print(response)
         data = response.json()  # Simplified way to parse JSON response
         article_data = {
@@ -53,7 +53,7 @@ class Test(APIView):
         }
         df = pd.DataFrame(article_data)
         print(df)
-        c=Category.objects.get(id='be534fc5-120f-4da3-83dd-c1ef789057e1')
+        c=Category.objects.get(id='09b07f1f-de97-471e-b909-f1a2792823ec')
         u=User.objects.get(id=1)
         # Save to database
         for index, row in df.iterrows():
