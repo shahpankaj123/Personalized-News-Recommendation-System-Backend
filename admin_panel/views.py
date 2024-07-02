@@ -10,7 +10,7 @@ from django.db.models import F
 from account.mixins import AdminUserPermissionMixin,AdminStaffUserPermissionMixin
 
 #Handles retrieving a list of all users.
-class UserListGetView(AdminStaffUserPermissionMixin,APIView):
+class UserListGetView(AdminUserPermissionMixin,APIView):
     def get(self, request):
         print(request.user)
         users = User.objects.all()
@@ -18,7 +18,7 @@ class UserListGetView(AdminStaffUserPermissionMixin,APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     #Handles the creation of a new user.
-class UserPostView(AdminStaffUserPermissionMixin,APIView):
+class UserPostView(AdminUserPermissionMixin,APIView):
     def post(self, request):
         """
         It takes user data from the request, validates and saves it if valid, 
@@ -32,7 +32,7 @@ class UserPostView(AdminStaffUserPermissionMixin,APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 #Retrieves details of a specific user based on the provided ID
-class UserGetView(AdminStaffUserPermissionMixin,APIView):
+class UserGetView(AdminUserPermissionMixin,APIView):
     def get(self, request):
         #It fetches the user by ID, serializes the user data, and returns it. 
         id = request.GET.get('id')
@@ -46,7 +46,7 @@ class UserGetView(AdminStaffUserPermissionMixin,APIView):
             return Response({'info': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
     
 #Updates details of a specific user based on the provided ID
-class UserPutView(AdminStaffUserPermissionMixin,APIView):
+class UserPutView(AdminUserPermissionMixin,APIView):
     def put(self, request):
         #It fetches the user by ID, validates and updates the user data if valid, and returns the updated data
         id = request.data.get('id')
@@ -63,7 +63,7 @@ class UserPutView(AdminStaffUserPermissionMixin,APIView):
             return Response({'info': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
     
 #Deletes a specific user based on the provided ID
-class UserDeleteView(AdminStaffUserPermissionMixin,APIView):
+class UserDeleteView(AdminUserPermissionMixin,APIView):
     def delete(self, request):
         id = request.data.get('id')
         if id is None:
@@ -212,6 +212,17 @@ class CountCategoryView(AdminStaffUserPermissionMixin,APIView):
             return Response({'count': count}, status=status.HTTP_200_OK)
         except:
             return Response({'count': 0}, status=status.HTTP_200_OK)
+        
+class CountCategorywiseView(AdminStaffUserPermissionMixin,APIView):
+    def get(self,request):
+        id = request.data.get('id')
+        if id is None:
+            return Response({'info': 'Invalid ID'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            count = Post.objects.filter(category_id=id).count()
+            return Response({'count': count}, status=status.HTTP_200_OK)
+        except:
+            return Response({'count': 0}, status=status.HTTP_200_OK)
 
 class ContactViewApi(AdminStaffUserPermissionMixin ,APIView):
     def get(self, request):
@@ -220,3 +231,4 @@ class ContactViewApi(AdminStaffUserPermissionMixin ,APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=500)
         return Response(query, status=200)
+    
