@@ -5,7 +5,7 @@ from .models import Category,Post
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'is_admin', 'is_staffusers','is_active']
+        fields = ['id', 'username', 'email','password', 'is_admin', 'is_staffusers','is_active']
 
     def create(self, validated_data):
         #handles creating a new User instance, including proper password handling (hashing) before saving the instance to the database.
