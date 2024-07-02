@@ -36,6 +36,31 @@ class NewsVideoListView(APIView):
             cache.set("videos",news_videos, timeout=60)
         serializer = NewsVideoSerializer(news_videos, many=True)
         return Response(serializer.data) 
+class NewsVideoUpdateView(AdminStaffUserPermissionMixin, APIView):
+    def put(self, request):
+        id = request.data.get('id')
+        if id is None:
+            return Response({'info': 'Invalid ID'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            news_video = NewsVideo.objects.get(id=id)
+            serializer = NewsVideoSerializer(news_video,data=request.data,partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except NewsVideo.DoesNotExist:
+            return Response({'info': 'News Video not found'}, status=status.HTTP_404_NOT_FOUND)
+class NewsVideoDeleteView(AdminStaffUserPermissionMixin, APIView):
+    def delete(self, request):
+        id = request.data.get('id')
+        if id is None:
+            return Response({'info': 'Invalid ID'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            news_video = NewsVideo.objects.get(id=id)
+            news_video.delete()
+            return Response({'info': 'News Video deleted successfully'}, status=status.HTTP_200_OK)
+        except NewsVideo.DoesNotExist:
+            return Response({'info': 'News Video not found'}, status=status.HTTP_404_NOT_FOUND)
        
 # Route to get data and save into databases
 class Test(APIView):

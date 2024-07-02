@@ -212,6 +212,17 @@ class CountCategoryView(AdminStaffUserPermissionMixin,APIView):
             return Response({'count': count}, status=status.HTTP_200_OK)
         except:
             return Response({'count': 0}, status=status.HTTP_200_OK)
+        
+class CountCategorywiseView(AdminStaffUserPermissionMixin,APIView):
+    def get(self,request):
+        id = request.data.get('id')
+        if id is None:
+            return Response({'info': 'Invalid ID'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            count = Post.objects.filter(category_id=id).count()
+            return Response({'count': count}, status=status.HTTP_200_OK)
+        except:
+            return Response({'count': 0}, status=status.HTTP_200_OK)
 
 class ContactViewApi(AdminStaffUserPermissionMixin ,APIView):
     def get(self, request):
@@ -220,3 +231,4 @@ class ContactViewApi(AdminStaffUserPermissionMixin ,APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=500)
         return Response(query, status=200)
+    
