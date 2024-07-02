@@ -26,7 +26,7 @@ class PostNewsVideoViews(AdminStaffUserPermissionMixin ,APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class NewsVideoListView(AdminStaffUserPermissionMixin ,APIView):
+class NewsVideoListView(APIView):
     def get(self, request):
         if cache.get("videos"):
             news_videos=cache.get("videos")
@@ -38,6 +38,8 @@ class NewsVideoListView(AdminStaffUserPermissionMixin ,APIView):
         return Response(serializer.data) 
     
 class NewsVideoUpdateView(AdminStaffUserPermissionMixin, APIView):
+
+    parser_classes = (MultiPartParser, FormParser)
 
     def put(self, request):
         id = request.data.get('id')
@@ -53,7 +55,8 @@ class NewsVideoUpdateView(AdminStaffUserPermissionMixin, APIView):
         except NewsVideo.DoesNotExist:
             return Response({'info': 'News Video not found'}, status=status.HTTP_404_NOT_FOUND)
         
-class NewsVideoDeleteView(AdminStaffUserPermissionMixin, APIView):
+class NewsVideoDeleteView(AdminStaffUserPermissionMixin ,APIView):
+
     def delete(self, request):
         id = request.data.get('id')
         if id is None:
