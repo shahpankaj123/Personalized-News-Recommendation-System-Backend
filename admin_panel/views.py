@@ -184,7 +184,7 @@ class CountAdminView(AdminStaffUserPermissionMixin,APIView):
 class CountStaffView(AdminStaffUserPermissionMixin,APIView):
     def get(self, request):
         try:
-            count = User.objects.filter(is_staff=True).count()
+            count = User.objects.filter(is_staffusers=True).count()
             return Response({'count': count}, status=status.HTTP_200_OK)
         except:
             return Response({'count': 0}, status=status.HTTP_200_OK)
@@ -212,17 +212,21 @@ class CountCategoryView(AdminStaffUserPermissionMixin,APIView):
             return Response({'count': count}, status=status.HTTP_200_OK)
         except:
             return Response({'count': 0}, status=status.HTTP_200_OK)
-        
+#PANKAJ YO MILAU HAI
 class CountCategorywiseView(AdminStaffUserPermissionMixin,APIView):
     def get(self,request):
-        id = request.data.get('id')
-        if id is None:
-            return Response({'info': 'Invalid ID'}, status=status.HTTP_400_BAD_REQUEST)
         try:
-            count = Post.objects.filter(category_id=id).count()
-            return Response({'count': count}, status=status.HTTP_200_OK)
-        except:
-            return Response({'count': 0}, status=status.HTTP_200_OK)
+            categories = Category.objects.all()
+            category_counts = []
+
+            for category in categories:
+                count = Post.objects.filter(category__=category.id).count()
+                category_counts.append({'category' : F('category'), 'count': F('count')})
+
+            return Response({'category_counts': category_counts}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
+
 
 class ContactViewApi(AdminStaffUserPermissionMixin ,APIView):
     def get(self, request):
