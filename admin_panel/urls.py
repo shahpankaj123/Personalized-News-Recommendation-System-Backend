@@ -31,5 +31,5 @@ urlpatterns = [
     path('count/staff/',CountStaffView.as_view()),
     path('count/category/',CountCategoryView.as_view()),
     path('count/post/',CountPostView.as_view()),
-    path('count/categorywise_post/',CountCategorywiseView.as_view()), 
+    path('pie-chart-count/',CountCategorywiseView.as_view()),
 ]
