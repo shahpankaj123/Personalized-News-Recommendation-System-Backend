@@ -62,7 +62,10 @@ class UserLoginView(APIView):
                 if user.is_active:
                     login(request,user)
                     token, created = Token.objects.get_or_create(user=user)
-                    return Response({'email':email,'token':token.key,'id':user.id},status=status.HTTP_200_OK)
+                    role=0
+                    if user.is_admin or user.is_staffusers:
+                        role=1
+                    return Response({'email':email,'token':token.key,'id':user.id,'role':role},status=status.HTTP_200_OK)
                 else:
                     return Response({'detail': 'Account not Activated.'}, status=status.HTTP_400_BAD_REQUEST)
 

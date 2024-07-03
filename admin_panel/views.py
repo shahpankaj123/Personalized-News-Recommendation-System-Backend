@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from account.models import User
 from contact.models import Contact
-from admin_panel.serializers import UserSerializer,PostSerializer,CategorySerializer
+from admin_panel.serializers import UserSerializer,PostSerializer,CategorySerializer,CreatePostSerializer
 from .models import Category,Post
 from django.db.models import F
 from account.mixins import AdminUserPermissionMixin,AdminStaffUserPermissionMixin
@@ -157,7 +157,7 @@ class PostPutView(AdminStaffUserPermissionMixin,APIView):
             return Response({'info': 'Invalid ID'}, status=status.HTTP_400_BAD_REQUEST)
         try:
             post = Post.objects.get(id=id)
-            serializer = PostSerializer(post,data=request.data,partial=True)
+            serializer = CreatePostSerializer(post,data=request.data,partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
@@ -167,7 +167,7 @@ class PostPutView(AdminStaffUserPermissionMixin,APIView):
         
 class PostPostView(AdminStaffUserPermissionMixin,APIView):
     def post(self, request):
-        serializer = PostSerializer(data=request.data)
+        serializer = CreatePostSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response({'info': 'Created Successfully'}, status=status.HTTP_201_CREATED)
