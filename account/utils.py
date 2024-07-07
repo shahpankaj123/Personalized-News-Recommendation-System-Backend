@@ -33,7 +33,7 @@ def send_reset_password_email(recipient_email, activation_url):
 def send_top_news_email():
     subject = 'Notice'
     from_email = settings.EMAIL_HOST_USER
-    user_obj = User.objects.filter(is_normalusers=True)
+    user_obj = User.objects.filter(is_normalusers=True,is_admin=False,is_staffusers=False,is_active=True)
     to = [x.email for x in user_obj if x.email] 
     if to:
         post = Post.objects.all()[:5]
@@ -42,6 +42,5 @@ def send_top_news_email():
         email = EmailMultiAlternatives(subject, text_content, from_email, to)
         email.attach_alternative(html_content, "text/html")
         email.send()
-
 
 
