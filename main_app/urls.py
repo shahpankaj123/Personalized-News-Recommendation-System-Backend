@@ -8,4 +8,5 @@ urlpatterns = [
     path('search-post/',SearchPostView.as_view()),
     path('get_category/',CategoryGetView.as_view()),
     path('get-single-post/',SinglePostView.as_view()),
+
 ]

@@ -8,7 +8,7 @@ from django.utils import timezone
 from rest_framework import status
 from django.core.cache import cache
 from admin_panel.serializers import CategorySerializer
-
+from django.shortcuts import render, get_object_or_404
 
 class CategoryGetView(APIView):
     def get(self, request):
