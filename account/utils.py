@@ -44,3 +44,4 @@ def send_top_news_email():
         email.send()
 
 
+

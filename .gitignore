@@ -11,3 +11,4 @@ contact/migrations
 vapps/migrations
 vapps/__pycache__
 main_app/migrations
+dump.rdb
