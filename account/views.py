@@ -15,6 +15,7 @@ from rest_framework.authtoken.models import Token
 from django.conf import settings
 from account.utils import send_activation_email,send_reset_password_email
 import random
+from django.core.cache import cache
 
 def custom_404(request, exception):
     return render(request, 'accounts/404.html', status=404)
@@ -61,6 +62,7 @@ class UserLoginView(APIView):
             if user is not None:
                 if user.is_active:
                     login(request,user)
+                    cache.set("email",user.email,timeout=86400)
                     token, created = Token.objects.get_or_create(user=user)
                     role=0
                     if user.is_admin or user.is_staffusers:
@@ -78,6 +80,7 @@ class UserLogoutView(APIView):
     def post(self, request, *args):
         token = Token.objects.get(user=request.user)
         token.delete()
+        cache.delete('email')
         logout(request)
         return Response({"success": True, "detail": "Logged out!"}, status=status.HTTP_200_OK) 
     

@@ -27,5 +27,5 @@ class Post(models.Model):
         db_table = 'Post'
 
     def __str__(self):
-        return self.title     
+        return self.title +self.category.name    
 

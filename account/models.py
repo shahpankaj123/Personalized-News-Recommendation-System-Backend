@@ -50,6 +50,8 @@ class User(AbstractBaseUser):
     is_normalusers=models.BooleanField(default=False)
     is_staffusers=models.BooleanField(default=False)
     otp=models.IntegerField(default=0)
+    is_recommend=models.BooleanField(default=False)
+    recommended_title=models.CharField(max_length=255,null=True)
 
     objects = UserManager()
 

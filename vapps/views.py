@@ -14,6 +14,7 @@ from account.models import User
 from django.core.files.base import ContentFile
 from django.core.files import File
 import os  
+import pandas as pd
 
 class PostNewsVideoViews(AdminStaffUserPermissionMixin ,APIView):
 
@@ -72,8 +73,8 @@ class NewsVideoDeleteView(AdminStaffUserPermissionMixin ,APIView):
 class Test(APIView):
     def get(self, request):
         API_KEY = '034c373ed2984aecb086fbf614f3fffe'
-        s='Business'
-        response = requests.get(f"https://newsapi.org/v2/everything?q=AI&from=2024-06-01&sortBy=publishedAt&apiKey=bb061a9abb70445eb0a3028e54fd1d56")
+        s='TECH'
+        response = requests.get(f"https://newsapi.org/v2/everything?q=pubg&from=2024-06-22&sortBy=publishedAt&apiKey={API_KEY}")
         print(response)
         data = response.json()  # Simplified way to parse JSON response
         article_data = {
@@ -84,7 +85,7 @@ class Test(APIView):
         }
         df = pd.DataFrame(article_data)
         print(df)
-        c=Category.objects.get(id='09b07f1f-de97-471e-b909-f1a2792823ec')
+        c=Category.objects.get(name=s)
         u=User.objects.get(id=1)
         # Save to database
         for index, row in df.iterrows():
@@ -103,3 +104,6 @@ class Test(APIView):
             post.save()
 
         return Response({'data': 'info'}, status=200)
+
+
+
