@@ -25,8 +25,8 @@ category_mapping = {
         '111':'ENVIRONMENT',       
     }
 
-def get_similar_posts(post_id, num_recommendations=60):
-    posts = Post.objects.all()
+def get_similar_posts(post_id,cat_id ,num_recommendations=60):
+    posts = Post.objects.filter(category__id=cat_id)
     post_contents = [post.title for post in posts]
 
     tfidf = TfidfVectorizer(stop_words='english')
@@ -43,7 +43,9 @@ def get_similar_posts(post_id, num_recommendations=60):
     similar_post_indices = [i[0] for i in similarity_scores[1:num_recommendations + 1]]
     
     similar_posts = [posts[i] for i in similar_post_indices]
-    return similar_posts
+    rest_post=Post.objects.exclude(category__id=cat_id)[0:20]
+    post=similar_posts+list(rest_post)
+    return post
 
 def Predict(title):
     try:
@@ -56,7 +58,7 @@ def Predict(title):
         print(cat)
         post_id=Post.objects.filter(category__id=cat.id).first()
         print(post_id,cat)   
-        posts=get_similar_posts(post_id.id, num_recommendations=35)
+        posts=get_similar_posts(post_id.id,cat.id, num_recommendations=35)
         serializer = PostSerializer(posts, many=True)
         return serializer.data
     except Exception as e:
