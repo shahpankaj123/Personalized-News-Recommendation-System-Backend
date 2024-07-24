@@ -115,7 +115,7 @@
         <h1>Top 5 News</h1>
         {% for x in post %}
         <div class="news-box">
-            <img src="http://localhost:8000{{ x.post_img.url }}" alt="{{ x.title }}">
+            <img src="http://127.0.0.1:8000/media/{{ x.post_img }}" alt="{{ x.title }}">
             <div class="news-content">
                 <h2>{{ x.title }}</h2>
                 <p>{{ x.description }}...</p>

@@ -119,14 +119,11 @@ class CategorywisePostView(APIView):
             category = request.GET.get('categoryId')
             if not category:
                 return Response({'error': 'Category parameter is missing.'}, status=status.HTTP_400_BAD_REQUEST)
-            
-            end_date = timezone.now()
-            start_date = end_date - timedelta(days=30)
 
             if cache.get(f"category-posts{category}"):
                 posts=cache.get(f"category-posts{category}")
             else:    
-                posts = Post.objects.filter(category__id=category, post_date__range=[start_date, end_date])
+                posts = Post.objects.filter(category__id=category).order_by('-post_date')
                 cache.set(f"category-posts{category}",posts, timeout=60)
 
             #posts = Post.objects.filter(category__id=category, post_date__range=[start_date, end_date])

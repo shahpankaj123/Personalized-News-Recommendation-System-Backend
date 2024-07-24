@@ -73,8 +73,8 @@ class NewsVideoDeleteView(AdminStaffUserPermissionMixin ,APIView):
 class Test(APIView):
     def get(self, request):
         API_KEY = '034c373ed2984aecb086fbf614f3fffe'
-        s='EDUCATION'
-        response = requests.get(f"https://newsapi.org/v2/everything?q=medical&from=2024-06-22&sortBy=publishedAt&apiKey={API_KEY}")
+        s='ENTERTAINMENT'
+        response = requests.get(f"https://newsapi.org/v2/everything?q=spiderman&sortBy=publishedAt&apiKey={API_KEY}")
         print(response)
         data = response.json()  # Simplified way to parse JSON response
         article_data = {
